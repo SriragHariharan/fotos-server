@@ -1,3 +1,4 @@
+import connectDB from './config/db';
 import express, { Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
@@ -29,6 +30,10 @@ app.get('/test', (_req: Request, res: Response) => {
   res.send('fotos server is running');
 });
 
+// auth routes
+import authRouter from './routes/authRoutes';
+app.use('/api/auth', authRouter);
+
 // Global error handler middleware
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err);
@@ -39,5 +44,6 @@ app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
 
 // Start server
 app.listen(process.env.PORT, () => {
+    connectDB();
   console.log('fotos server listening on port ' + (process.env.PORT));
 });
