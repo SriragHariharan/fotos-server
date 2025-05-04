@@ -34,6 +34,10 @@ app.get('/test', (_req: Request, res: Response) => {
 import authRouter from './routes/authRoutes';
 app.use('/api/auth', authRouter);
 
+//album routes
+import albumRouter from './routes/albumRoutes';
+app.use('/api/album', albumRouter);
+
 // Global error handler middleware
 app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err);
