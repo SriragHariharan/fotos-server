@@ -64,3 +64,13 @@ export const getAlbumsController = async (req: Request, res: Response, next: Nex
         next(error);
     }
 }
+
+//get album by albumID
+export const getAlbumDetailsController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const album = await Album.findOne({_id:req.params.albumID, user: req.user?.userID });
+        res.status(200).json({ success: true, message: 'Album fetched successfully', data: { album } });
+    } catch (error) {
+        next(error);
+    }
+}

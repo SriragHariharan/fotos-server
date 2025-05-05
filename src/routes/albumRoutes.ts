@@ -1,4 +1,4 @@
-import { createAlbumController, getAlbumsController } from "../controllers/albumController";
+import { createAlbumController, getAlbumDetailsController, getAlbumsController } from "../controllers/albumController";
 import authMiddleware from "../helpers/authMiddleware";
 import { uploadMultipleFiles } from "../helpers/multer";
 
@@ -9,5 +9,8 @@ albumRouter.post('/create', authMiddleware, uploadMultipleFiles, createAlbumCont
 
 //get all albums of a specific user
 albumRouter.get('/', authMiddleware, getAlbumsController);
+
+//get album by albumID
+albumRouter.get('/:albumID', authMiddleware, getAlbumDetailsController);
 
 export default albumRouter;
