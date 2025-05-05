@@ -53,3 +53,14 @@ export const createAlbumController = async (req: Request, res: Response, next: N
     next(error);
   }
 };
+
+//get all albums of a specific user
+export const getAlbumsController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const albums = await Album.find({ user: req.user?.userID })
+            .select({ name: 1, images: { $slice: 3 } });
+        res.status(200).json({ success: true, message: 'Albums fetched successfully', data: { albums } });
+    } catch (error) {
+        next(error);
+    }
+}
