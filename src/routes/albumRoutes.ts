@@ -1,4 +1,4 @@
-import { createAlbumController, getAlbumDetailsController, getAlbumsController } from "../controllers/albumController";
+import { createAlbumController, getAlbumDetailsController, getAlbumsController, updateAlbumController } from "../controllers/albumController";
 import authMiddleware from "../helpers/authMiddleware";
 import { uploadMultipleFiles } from "../helpers/multer";
 
@@ -12,5 +12,8 @@ albumRouter.get('/', authMiddleware, getAlbumsController);
 
 //get album by albumID
 albumRouter.get('/:albumID', authMiddleware, getAlbumDetailsController);
+
+//update album by albumID
+albumRouter.put('/:albumID', authMiddleware, updateAlbumController );
 
 export default albumRouter;

@@ -74,3 +74,13 @@ export const getAlbumDetailsController = async (req: Request, res: Response, nex
         next(error);
     }
 }
+
+//update album by albumID
+export const updateAlbumController = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        await Album.updateOne({ _id: req.params.albumID, user: req.user?.userID }, { $set: { images: req.body.images } });
+        res.status(200).json({ success: true, message: 'Album updated successfully' });
+    } catch (error) {
+        next(error);
+    }
+}
