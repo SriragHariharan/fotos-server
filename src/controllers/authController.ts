@@ -121,3 +121,20 @@ export const changePasswordController = async(req: Request, res: Response, next:
         next(error)
     }
 }
+
+//get the profile name and email of the user
+export const getProfileController = async(req: Request, res: Response, next: NextFunction) => {
+    try {
+        //find user
+        const existingUser = await User.findOne({_id: req?.user?.userID});
+        if(!existingUser){
+            throw createHttpError(400, "User does not exist");
+        }
+
+        //send response
+        res.status(200).json({ success: true, message: "Profile fetched successfully", data:{ username: existingUser?.username, email: existingUser?.email  } });
+
+    } catch (error) {
+        next(error)
+    }
+}
