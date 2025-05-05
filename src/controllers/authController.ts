@@ -82,12 +82,29 @@ export const loginUserController = async(req: Request, res: Response, next: Next
     }
 }
 
-//change the password
-export const changePasswordController = async(req: Request, res: Response, next: NextFunction) => {
+//get the profile name and email of the user
+export const getProfileController = async(req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log(req.user, req.body);
+        //find user
+        const existingUser = await User.findOne({_id: req?.user?.userID});
+        if(!existingUser){
+            throw createHttpError(400, "User does not exist");
+        }
+
+        //send response
+        res.status(200).json({ success: true, message: "Profile fetched successfully", data:{ username: existingUser?.username, email: existingUser?.email  } });
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+//update password
+export const updatePasswordController = async(req: Request, res: Response, next: NextFunction) => {
+    try {
+        console.log("body ::: ",req.body)
         //validate inputs
-        if(!req?.body?.oldPassword || !req?.body?.newPassword || !req?.body?.confirmPassword){
+        if(!req?.body?.currentPassword || !req?.body?.newPassword || !req?.body?.confirmPassword){
             throw createHttpError(400, "All fields are required");
         }
 
@@ -103,7 +120,7 @@ export const changePasswordController = async(req: Request, res: Response, next:
         }
 
         //check password
-        const isPasswordValid = await bcrypt.compare(req?.body?.oldPassword, existingUser.password);
+        const isPasswordValid = await bcrypt.compare(req?.body?.currentPassword, existingUser.password);
         if(!isPasswordValid){
             throw createHttpError(400, "Invalid password");
         }
@@ -116,23 +133,6 @@ export const changePasswordController = async(req: Request, res: Response, next:
 
         //send response
         res.status(200).json({ success: true, message: "Password changed successfully" });
-
-    } catch (error) {
-        next(error)
-    }
-}
-
-//get the profile name and email of the user
-export const getProfileController = async(req: Request, res: Response, next: NextFunction) => {
-    try {
-        //find user
-        const existingUser = await User.findOne({_id: req?.user?.userID});
-        if(!existingUser){
-            throw createHttpError(400, "User does not exist");
-        }
-
-        //send response
-        res.status(200).json({ success: true, message: "Profile fetched successfully", data:{ username: existingUser?.username, email: existingUser?.email  } });
 
     } catch (error) {
         next(error)
